@@ -430,21 +430,29 @@ export default function App() {
                   </button>
                 </div>
                 
-                <div className="space-y-4 text-[#6B5A4E] leading-relaxed italic border-l-4 border-[#EDD1B0] pl-6 py-4">
-                  <p>
-                    "A Vó Regina não era apenas uma cozinheira; ela era o coração pulsante da nossa casa. Cada esfiha que saía do seu forno carregava consigo décadas de carinho, histórias sussurradas e o calor de um quintal onde a infância parecia eterna."
+                <div className="space-y-6 text-[#6B5A4E] leading-relaxed">
+                  <p className="italic border-l-4 border-[#EDD1B0] pl-6 py-2 text-lg">
+                    "A Vó Regina não era apenas uma cozinheira; ela era o coração pulsante da nossa família."
                   </p>
-                </div>
+                  
+                  <p>
+                    Era no quintal que tudo acontecia — risadas, encontros, infância livre e memórias que ficaram pra sempre. E era na cozinha dela que o simples se transformava em algo inesquecível.
+                  </p>
+                  
+                  <p>
+                    Suas receitas não eram só comida. Eram cuidado, eram presença, eram a forma mais sincera de dizer <strong>“eu te amo”</strong> sem precisar de muitas palavras.
+                  </p>
 
-                <div className="space-y-4 text-[#6B5A4E] leading-relaxed">
                   <p>
-                    Ela nos ensinou, sem precisar de muitas palavras, que cozinhar é a forma mais pura e generosa de dizer <strong>"eu te amo"</strong>. Em suas mãos, ingredientes simples se transformavam em banquetes de afeto que uniam todos em volta da mesa.
+                    Ela não fazia esfihas. Mas nos ensinou algo maior: que cozinhar é um ato de amor — e que é isso que realmente alimenta.
                   </p>
+
                   <p>
-                    Hoje, a saudade é um tempero constante em nossos dias, mas o seu legado permanece vivo. Vive em cada receita que guardamos como um tesouro, em cada técnica que nos foi passada com paciência e, principalmente, no amor que depositamos em cada massa que abrimos.
+                    Hoje, o <strong>Quintal da Vó Regina</strong> nasce dessa história. Das lembranças no quintal, das receitas guardadas com carinho e do desejo de manter viva tudo aquilo que ela representava.
                   </p>
+
                   <p>
-                    O <strong>Quintal da Vó Regina</strong> não é apenas uma loja; é a nossa forma de manter viva a chama desse amor. Compartilhar essas esfihas com você é convidar a sua família para um pedacinho da nossa casa, honrando a mulher maravilhosa que nos deu tudo, inclusive o sabor de ser feliz.
+                    Cada sabor carrega um pedaço dessa memória. Cada detalhe é uma forma de homenagem. Mais do que vender comida, queremos compartilhar afeto. E convidar você a sentir um pouco do que foi crescer nesse quintal cheio de amor. 🤍
                   </p>
                 </div>
 
