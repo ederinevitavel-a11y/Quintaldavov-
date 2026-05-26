@@ -43,33 +43,101 @@ interface CartItem {
 
 // Constants
 const WHATSAPP_NUMBER = "5511965394076";
-const UNIT_PRICE = 24.99; // Price for 500g package as per image
+const PACKAGE_PRICE = 24.99; // Price for 500g package
+const CONE_CLASSIC_PRICE = 12.00;
+const CONE_SPECIAL_PRICE = 15.00;
 
 const FLAVORS: Flavor[] = [
+  // Esfihas
   {
     id: 'carne',
     name: 'Carne com Carinho',
-    category: 'Tradicional',
+    category: 'Salgada',
     description: 'Carne moída de primeira selecionada, temperada com cebola picadinha, ervas frescas e aquele toque de casa da vovó.',
-    price: UNIT_PRICE,
+    price: PACKAGE_PRICE,
     image: 'https://i.imgur.com/KAb26iV.png',
     tag: 'O Preferido'
   },
   {
     id: 'frango',
     name: 'Franguinho da Vovó',
-    category: 'Caseira',
+    category: 'Salgada',
     description: 'Suculento frango desfiado com temperos naturais da horta, envolto em uma massa levíssima e douradinha.',
-    price: UNIT_PRICE,
+    price: PACKAGE_PRICE,
     image: 'https://i.imgur.com/5eAlIIi.png',
   },
   {
     id: 'ricota',
     name: 'Nuvem de Ricota',
-    category: 'Delicada',
+    category: 'Salgada',
     description: 'Delicada ricota fresca batida com azeitonas selecionadas, trazendo o equilíbrio perfeito do salgado com a leveza.',
-    price: UNIT_PRICE,
+    price: PACKAGE_PRICE,
     image: 'https://i.imgur.com/9JBxkLs.png',
+  },
+  // Cones - Linha Clássica (R$ 12)
+  {
+    id: 'cone-vo-raimundo',
+    name: 'Vô Raimundo',
+    category: 'Cone',
+    description: 'Sabor: Brigadeiro | Clássico, cremoso e impossível não gostar — como o vô Raimundo, que fazia todo mundo sorrir. 👴😄',
+    price: CONE_CLASSIC_PRICE,
+    image: 'https://i.imgur.com/lrN0GQM.png',
+    tag: 'Linha Clássica'
+  },
+  {
+    id: 'cone-danilo',
+    name: 'Danilo',
+    category: 'Cone',
+    description: 'Sabor: Doce de leite | Doce, simples e especial. Um sabor escolhido com carinho para homenagear alguém que deixu amor nas pequenas memórias. 🤍',
+    price: CONE_CLASSIC_PRICE,
+    image: 'https://i.imgur.com/M1iihkt.png',
+    tag: 'Linha Clássica'
+  },
+  {
+    id: 'cone-tia-regina',
+    name: 'Tia Regina — “Lava o Pé”',
+    category: 'Cone',
+    description: 'Sabor: Beijinho com chocolate | “Vai lavar o pé no tanque antes de entrar.” Relembrando as tardes no quintal com o sabor perfeito do coco e chocolate. 🚿😂',
+    price: CONE_CLASSIC_PRICE,
+    image: 'https://i.imgur.com/PYW8Tx7.png',
+    tag: 'Linha Clássica'
+  },
+  // Cones - Linha Especial (R$ 15)
+  {
+    id: 'cone-thalita',
+    name: 'Thalita',
+    category: 'Cone',
+    description: 'Sabor: Brownie | O “bolo de terra” mais bonito do quintal… até a galinha pisar 🐔😂. Um cone intenso, chocolatudo e cheio de personalidade.',
+    price: CONE_SPECIAL_PRICE,
+    image: 'https://i.imgur.com/EqRvTTY.png',
+    tag: 'Linha Especial'
+  },
+  {
+    id: 'cone-chiquinho',
+    name: 'Chiquinho — “Cadê o Chiquinho?”',
+    category: 'Cone',
+    description: 'Sabor: Chocolate com avelã | “Cadê o Chiquinho?” Ele sempre chegava por último — mas com o melhor sorriso e esse sabor irresistível. 🏃‍♂️💛',
+    price: CONE_SPECIAL_PRICE,
+    image: 'https://i.imgur.com/iN7ZKB2.png',
+    tag: 'Linha Especial'
+  },
+  {
+    id: 'cone-raquel',
+    name: 'Raquel',
+    category: 'Cone',
+    description: 'Sabor: Ninho com Nutella | O toque carinhoso da Raquel em um cone que é puro afeto e doçura. ✨💖',
+    price: CONE_CLASSIC_PRICE,
+    image: 'https://i.imgur.com/pq5Rndq.png',
+    tag: 'Linha Clássica'
+  },
+  {
+    id: 'cone-thiago',
+    name: 'Thiago',
+    category: 'Cone',
+    description: 'Sabor: Paçoca Especial | O favorito do Thiago, trazendo aquele gostinho de festa no quintal com muito recheio. 🥜🌟',
+    price: CONE_CLASSIC_PRICE,
+    image: 'https://i.imgur.com/F0zsZHL.png',
+    tag: 'Linha Clássica'
   }
 ];
 
@@ -79,6 +147,11 @@ export default function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'Salgada' | 'Cone'>('Salgada');
+
+  const filteredFlavors = useMemo(() => {
+    return FLAVORS.filter(f => f.category === activeCategory);
+  }, [activeCategory]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -113,7 +186,10 @@ export default function App() {
   };
 
   const cartTotal = useMemo(() => {
-    return cart.reduce((acc, item) => acc + (item.quantity * UNIT_PRICE), 0);
+    return cart.reduce((acc, item) => {
+      const flavor = FLAVORS.find(f => f.id === item.flavorId);
+      return acc + (item.quantity * (flavor?.price || 0));
+    }, 0);
   }, [cart]);
 
   const totalItems = useMemo(() => {
@@ -126,7 +202,8 @@ export default function App() {
       "",
       ...cart.map(item => {
         const flavor = FLAVORS.find(f => f.id === item.flavorId);
-        return `• ${item.quantity}x Pacote 500g de ${flavor?.name}`;
+        const detail = flavor?.category === 'Cone' ? 'Unidade' : 'Pacote 500g';
+        return `• ${item.quantity}x ${detail} de ${flavor?.name}`;
       }),
       "",
       `*Total: R$ ${cartTotal.toFixed(2)}*`,
@@ -189,19 +266,27 @@ export default function App() {
               transition={{ delay: 0.2 }}
               className="text-lg text-[#6B5A4E] max-w-lg leading-relaxed"
             >
-              No Quintal da Vó Regina, cada esfiha é preparada seguindo a receita tradicional da família. Massa leve, recheios generosos e o carinho que só uma avó sabe dar.
+              No Quintal da Vó Regina, cada item é preparado seguindo a tradição da família. Do salgado das esfihas ao doce dos cones trufados, tudo com o carinho que só uma avó sabe dar.
             </motion.p>
 
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.25 }}
-              className="bg-white p-4 rounded-2xl shadow-sm border border-[#EDD1B0]/30 flex items-center gap-3 w-fit"
+              className="flex flex-wrap gap-4"
             >
-              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
-                <UtensilsCrossed size={20} />
+              <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#EDD1B0]/30 flex items-center gap-3 w-fit">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                  <UtensilsCrossed size={20} />
+                </div>
+                <p className="text-xs font-bold leading-tight text-[#8B4513]">Esfihas em Pacotes<br/>Prontos para assar!</p>
               </div>
-              <p className="text-xs font-bold leading-tight text-[#8B4513]">Pacotes de 500g<br/>Prontos para assar!</p>
+              <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#EDD1B0]/30 flex items-center gap-3 w-fit">
+                <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+                  <Heart size={20} />
+                </div>
+                <p className="text-xs font-bold leading-tight text-pink-700">Cones Trufados<br/>Sobremesa perfeita!</p>
+              </div>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -213,7 +298,7 @@ export default function App() {
                 Ver Cardápio <ArrowRight size={18} />
               </a>
               <div className="flex items-center gap-3 text-sm font-medium text-[#8B4513]">
-                <span>Já somos a escolha de mais de 500 famílias que amam o sabor caseiro!</span>
+                <span>Já somos a escolha de mais de 500 famílias que amam nossos salgados e doces!</span>
               </div>
             </motion.div>
           </div>
@@ -274,20 +359,40 @@ export default function App() {
 
       {/* Menu Section */}
       <section id="menu" className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-12 space-y-4">
           <h2 className="text-4xl md:text-5xl font-serif font-bold">Nossos Sabores Especiais</h2>
           <p className="text-[#6B5A4E] max-w-2xl mx-auto leading-relaxed">
-            Escolha seus favoritos. Cada pacote de 500g custa apenas <strong className="text-[#8B4513]">R$ 24,99</strong>.
+            Escolha seus favoritos e receba em casa com todo carinho.
           </p>
         </div>
 
+        {/* Category Tabs */}
+        <div className="flex justify-center gap-4 mb-12">
+          {[
+            { id: 'Salgada', label: 'Esfihas Salgadas', icon: <UtensilsCrossed size={18} /> },
+            { id: 'Cone', label: 'Cones Trufados', icon: <Heart size={18} /> }
+          ].map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id as any)}
+              className={`px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all duration-300 ${
+                activeCategory === cat.id 
+                  ? 'bg-[#5B7B5B] text-white shadow-lg' 
+                  : 'bg-white text-[#4A3728] hover:bg-[#F5E6D3] border border-[#EDD1B0]/30'
+              }`}
+            >
+              {cat.icon}
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {FLAVORS.map((flavor, idx) => (
+          {filteredFlavors.map((flavor, idx) => (
             <motion.div 
               key={flavor.id}
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-[#EDD1B0]/20"
             >
@@ -304,7 +409,7 @@ export default function App() {
                   </div>
                 )}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold text-[#5B7B5B]">
-                  {flavor.category}
+                  {flavor.category === 'Cone' ? 'Sobremesa' : flavor.category}
                 </div>
               </div>
               <div className="p-8 space-y-4">
@@ -317,7 +422,9 @@ export default function App() {
                 <div className="pt-4 flex items-center justify-between">
                   <div className="text-xl font-bold font-serif text-[#8B4513]">
                     R$ {flavor.price.toFixed(2)}
-                    <span className="text-xs font-normal text-gray-400 block mt-1">Pacote 500g</span>
+                    <span className="text-xs font-normal text-gray-400 block mt-1">
+                      {flavor.category === 'Cone' ? 'Unidade' : 'Pacote 500g'}
+                    </span>
                   </div>
                   <button 
                     onClick={() => addToCart(flavor.id)}
@@ -343,7 +450,7 @@ export default function App() {
               <span className="text-2xl font-serif font-bold">Quintal da Vó Regina</span>
             </div>
             <p className="max-w-md text-sm opacity-80 leading-relaxed">
-              Resgatando o sabor da infância em cada mordida. Nossas esfihas são assadas, congeladas e prontas para trazer alegria para a sua mesa.
+              Resgatando o sabor da infância em cada mordida. Nossas esfihas e cones trufados são feitos com amor para trazer alegria para a sua mesa.
             </p>
             <div className="flex gap-4 pt-4">
               <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#5B7B5B] hover:border-[#5B7B5B] transition-colors">
@@ -389,7 +496,7 @@ export default function App() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto pt-16 mt-16 border-t border-white/10 text-center opacity-50 text-xs">
-          ®2026 todos os direitos reservados a Major
+          © 2026 Major. Todos os direitos reservados.
         </div>
       </footer>
 
